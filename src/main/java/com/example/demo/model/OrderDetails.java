@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.math.BigDecimal;
@@ -17,6 +18,7 @@ public class OrderDetails {
 
     @ManyToOne
     @JoinColumn(name = "orders_id", referencedColumnName = "ordersId")
+    @JsonIgnore
     private Orders orders;
 
     @ManyToOne

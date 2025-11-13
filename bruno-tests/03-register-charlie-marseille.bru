@@ -1,0 +1,35 @@
+meta {
+  name: 03 - Register Charlie (Marseille)
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:8080/api/auth/register
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "username": "charlie_marseille",
+    "email": "charlie@marseille.com",
+    "password": "MarseillePwd789",
+    "address": {
+      "street": "1 Quai du Port",
+      "postalCode": "13002",
+      "city": "Marseille",
+      "country": "France"
+    }
+  }
+}
+
+assert {
+  res.status: eq 201
+  res.body.token: isDefined
+  res.body.username: eq charlie_marseille
+}
+
+script:post-response {
+  bru.setEnvVar("token_charlie", res.body.token);
+}

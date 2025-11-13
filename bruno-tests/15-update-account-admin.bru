@@ -1,0 +1,34 @@
+meta {
+  name: 18 - Update Account ADMIN (should succeed)
+  type: http
+  seq: 18
+}
+
+put {
+  url: http://localhost:8080/api/accounts/2
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token_admin}}
+}
+
+body:json {
+  {
+    "username": "alice_modified_by_admin",
+    "email": "alice_admin@paris.com",
+    "password": "AdminChangedPassword",
+    "address": {
+      "street": "10 avenue des Champs-Élysées",
+      "postalCode": "75008",
+      "city": "Paris",
+      "country": "France"
+    }
+  }
+}
+
+assert {
+  res.status: eq 200
+  res.body.username: eq alice_modified_by_admin
+}

@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -17,5 +18,6 @@ public class Address {
     private String country;
 
     @OneToOne(mappedBy = "address")
+    @JsonIgnore
     private Account account;
 }

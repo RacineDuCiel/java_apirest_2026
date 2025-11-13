@@ -1,0 +1,21 @@
+meta {
+  name: 11b - List Accounts ADMIN success
+  type: http
+  seq: 11
+}
+
+get {
+  url: http://localhost:8080/api/accounts
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token_admin}}
+}
+
+assert {
+  res.status: eq 200
+  res.body: isArray
+  res.body.length: gte 1
+}

@@ -1,0 +1,23 @@
+meta {
+  name: 14 - Get Account by ID (USER token)
+  type: http
+  seq: 14
+}
+
+get {
+  url: http://localhost:8080/api/accounts/2
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token_alice}}
+}
+
+assert {
+  res.status: eq 200
+  res.body.accountId: eq 2
+  res.body.username: isDefined
+  res.body.email: isDefined
+  res.body.address: isDefined
+}

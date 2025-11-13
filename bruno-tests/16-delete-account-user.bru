@@ -1,0 +1,19 @@
+meta {
+  name: 19 - Delete Account USER (should fail - only ADMIN)
+  type: http
+  seq: 19
+}
+
+delete {
+  url: http://localhost:8080/api/accounts/3
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token_bob}}
+}
+
+assert {
+  res.status: eq 403
+}

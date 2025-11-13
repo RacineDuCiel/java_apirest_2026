@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDateTime;
@@ -18,8 +19,10 @@ public class Orders {
 
     @ManyToOne
     @JoinColumn(name = "account_id", referencedColumnName = "accountId")
+    @JsonIgnore
     private Account account;
 
     @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<OrderDetails> orderDetails;
 }
