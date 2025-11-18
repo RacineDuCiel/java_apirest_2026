@@ -4,12 +4,15 @@ import com.javaapirestgosse.dto.AuthResponse;
 import com.javaapirestgosse.dto.LoginRequest;
 import com.javaapirestgosse.dto.RegisterRequest;
 import com.javaapirestgosse.service.AuthService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
+@Tag(name = "Authentification", description = "Inscription et connexion (routes publiques)")
 public class AuthController {
 
     private final AuthService authService;
@@ -19,6 +22,8 @@ public class AuthController {
     }
 
     @PostMapping("/register")
+    @Operation(summary = "Inscrire un utilisateur",
+        description = "Route publique. Aucun token requis. Retourne un JWT." )
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
         try {
             AuthResponse response = authService.register(request);
@@ -29,6 +34,8 @@ public class AuthController {
     }
 
     @PostMapping("/login")
+    @Operation(summary = "Authentifier un utilisateur",
+        description = "Route publique. Fournit un JWT en cas de succès." )
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         try {
             AuthResponse response = authService.login(request);
