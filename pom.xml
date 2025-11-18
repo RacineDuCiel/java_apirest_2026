@@ -8,11 +8,11 @@
         <version>3.5.6</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.letocart</groupId>
-    <artifactId>java_apirest_2026</artifactId>
+    <groupId>com.javaapirestgosse</groupId>
+    <artifactId>java_api_rest_gosse</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>java_apirest_2026</name>
-    <description>java_apirest_2026</description>
+    <name>JAVA_API_REST_GOSSE</name>
+    <description>Application JAVA_API_REST_GOSSE</description>
     <url/>
     <licenses>
         <license/>
