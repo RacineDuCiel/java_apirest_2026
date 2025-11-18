@@ -38,6 +38,15 @@ public class SecurityConfig {
                         // Routes publiques (pas d'authentification requise)
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
+            .requestMatchers(
+                "/docs",
+                "/docs/**",
+                "/api-docs/**",
+                "/v3/api-docs",
+                "/v3/api-docs/**",
+                "/swagger-ui.html",
+                "/swagger-ui/**"
+            ).permitAll()
                         
                         // Routes ADMIN seulement
                         .requestMatchers(HttpMethod.DELETE, "/api/accounts/**").hasAuthority("ROLE_ADMIN")
