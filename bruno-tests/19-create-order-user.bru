@@ -1,0 +1,42 @@
+meta {
+  name: 19 - Create Order (USER)
+  type: http
+  seq: 19
+}
+
+post {
+  url: http://localhost:8080/api/orders
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token_alice}}
+}
+
+body:json {
+  {
+    "items": [
+      {
+        "productId": 1,
+        "quantity": 2
+      },
+      {
+        "productId": 2,
+        "quantity": 1
+      }
+    ]
+  }
+}
+
+assert {
+  res.status: eq 201
+  res.body.status: eq CREATED
+  res.body.itemCount: eq 2
+  res.body.items.length: eq 2
+  res.body.items[0].productId: eq 1
+}
+
+script:post-response {
+  bru.setEnvVar("order_alice_id", res.body.orderId);
+}

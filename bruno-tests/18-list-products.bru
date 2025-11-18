@@ -1,0 +1,23 @@
+meta {
+  name: 18 - List Products
+  type: http
+  seq: 18
+}
+
+get {
+  url: http://localhost:8080/api/products
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token_alice}}
+}
+
+assert {
+  res.status: eq 200
+  res.body: isArray
+  res.body.length: gte 1
+  res.body[0].availableQuantity: isDefined
+  res.body[0].lowStock: isDefined
+}

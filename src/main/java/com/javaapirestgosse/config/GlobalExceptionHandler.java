@@ -17,13 +17,24 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<Map<String, Object>> handleAccessDenied(AccessDeniedException ex,
                                                                   HttpServletRequest request) {
+        return buildResponse(HttpStatus.FORBIDDEN,
+                "Accès refusé : privilèges insuffisants",
+                request.getRequestURI());
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Map<String, Object>> handleBadRequest(IllegalArgumentException ex,
+                                                                HttpServletRequest request) {
+        return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage(), request.getRequestURI());
+    }
+
+    private ResponseEntity<Map<String, Object>> buildResponse(HttpStatus status, String message, String path) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", Instant.now());
-        body.put("status", HttpStatus.FORBIDDEN.value());
-        body.put("error", HttpStatus.FORBIDDEN.getReasonPhrase());
-        body.put("message", "Accès refusé : privilèges insuffisants");
-        body.put("path", request.getRequestURI());
-
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(body);
+        body.put("status", status.value());
+        body.put("error", status.getReasonPhrase());
+        body.put("message", message);
+        body.put("path", path);
+        return ResponseEntity.status(status).body(body);
     }
 }

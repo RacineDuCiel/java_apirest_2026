@@ -24,7 +24,7 @@ public class AccountController {
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @Operation(summary = "Lister tous les comptes",
         description = "Réservé aux administrateurs.",
         security = {@SecurityRequirement(name = "bearerAuth")})
@@ -34,7 +34,7 @@ public class AccountController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @Operation(summary = "Consulter un compte",
         description = "Accessible uniquement aux administrateurs.",
         security = {@SecurityRequirement(name = "bearerAuth")})
@@ -48,7 +48,7 @@ public class AccountController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_USER')")
     @Operation(summary = "Créer un compte",
         description = "Accessible aux utilisateurs authentifiés (ROLE_USER ou ROLE_ADMIN).",
         security = {@SecurityRequirement(name = "bearerAuth")})
@@ -62,7 +62,7 @@ public class AccountController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @Operation(summary = "Mettre à jour un compte",
         description = "Réservé aux administrateurs.",
         security = {@SecurityRequirement(name = "bearerAuth")})
@@ -76,7 +76,7 @@ public class AccountController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @Operation(summary = "Supprimer un compte",
         description = "Réservé aux administrateurs.",
         security = {@SecurityRequirement(name = "bearerAuth")})

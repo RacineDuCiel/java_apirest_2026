@@ -38,15 +38,17 @@ public class SecurityConfig {
                         // Routes publiques (pas d'authentification requise)
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
-            .requestMatchers(
-                "/docs",
-                "/docs/**",
-                "/api-docs/**",
-                "/v3/api-docs",
-                "/v3/api-docs/**",
-                "/swagger-ui.html",
-                "/swagger-ui/**"
-            ).permitAll()
+                        .requestMatchers(
+                                "/docs",
+                                "/docs/**",
+                                "/api-docs/**",
+                                "/v3/api-docs",
+                                "/v3/api-docs/**",
+                                "/swagger-ui.html",
+                                "/swagger-ui/**"
+                        ).permitAll()
+                        .requestMatchers("/api/products/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                        .requestMatchers("/api/orders/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
                         
                         // Routes ADMIN seulement
                         .requestMatchers(HttpMethod.DELETE, "/api/accounts/**").hasAuthority("ROLE_ADMIN")
