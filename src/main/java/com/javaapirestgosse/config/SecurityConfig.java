@@ -50,12 +50,10 @@ public class SecurityConfig {
                         .requestMatchers("/api/products/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
                         .requestMatchers("/api/orders/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
                         
-                        // Routes ADMIN seulement
-                        .requestMatchers(HttpMethod.DELETE, "/api/accounts/**").hasAuthority("ROLE_ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/accounts/**").hasAuthority("ROLE_ADMIN")
-                        
                         // Routes accessibles selon les rôles
-                        .requestMatchers(HttpMethod.GET, "/api/accounts/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/accounts/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
+                        .requestMatchers(HttpMethod.PUT, "/api/accounts/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
+                        .requestMatchers(HttpMethod.GET, "/api/accounts/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
                         .requestMatchers(HttpMethod.POST, "/api/accounts").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
                         
                         // Toute autre requête nécessite une authentification

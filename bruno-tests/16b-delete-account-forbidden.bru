@@ -1,0 +1,19 @@
+meta {
+  name: 16b - Delete Account (other user forbidden)
+  type: http
+  seq: 16
+}
+
+delete {
+  url: http://localhost:8080/api/accounts/2
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token_bob}}
+}
+
+assert {
+  res.status: eq 403
+}

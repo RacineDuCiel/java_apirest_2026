@@ -34,9 +34,9 @@ public class AccountController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("@accountSecurity.canAccessAccount(authentication, #id)")
     @Operation(summary = "Consulter un compte",
-        description = "Accessible uniquement aux administrateurs.",
+        description = "Accessible à l'administrateur ou au propriétaire du compte.",
         security = {@SecurityRequirement(name = "bearerAuth")})
     public ResponseEntity<?> getAccountById(@PathVariable Long id) {
         try {
@@ -62,9 +62,9 @@ public class AccountController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("@accountSecurity.canAccessAccount(authentication, #id)")
     @Operation(summary = "Mettre à jour un compte",
-        description = "Réservé aux administrateurs.",
+        description = "Accessible à l'administrateur ou au propriétaire du compte.",
         security = {@SecurityRequirement(name = "bearerAuth")})
     public ResponseEntity<?> updateAccount(@PathVariable Long id, @RequestBody Account account) {
         try {
@@ -76,9 +76,9 @@ public class AccountController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("@accountSecurity.canAccessAccount(authentication, #id)")
     @Operation(summary = "Supprimer un compte",
-        description = "Réservé aux administrateurs.",
+        description = "Accessible à l'administrateur ou au propriétaire du compte.",
         security = {@SecurityRequirement(name = "bearerAuth")})
     public ResponseEntity<?> deleteAccount(@PathVariable Long id) {
         try {

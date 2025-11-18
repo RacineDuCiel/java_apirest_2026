@@ -9,10 +9,10 @@ API Spring Boot permettant d'enregistrer des utilisateurs, gérer leurs comptes 
 | POST | `/api/auth/register` | Création d'un utilisateur + émission d'un token | Public |
 | POST | `/api/auth/login` | Authentification et récupération d'un token | Public |
 | GET | `/api/accounts` | Liste tous les comptes | `ADMIN` |
-| GET | `/api/accounts/{id}` | Récupère un compte par identifiant | `ADMIN` |
+| GET | `/api/accounts/{id}` | Récupère un compte par identifiant | `ADMIN`, propriétaire |
 | POST | `/api/accounts` | Crée un compte (ex: adresse ou notice associée) | `USER`, `ADMIN` |
-| PUT | `/api/accounts/{id}` | Met à jour un compte existant | `ADMIN` |
-| DELETE | `/api/accounts/{id}` | Supprime un compte | `ADMIN` |
+| PUT | `/api/accounts/{id}` | Met à jour un compte existant | `ADMIN`, propriétaire |
+| DELETE | `/api/accounts/{id}` | Supprime un compte | `ADMIN`, propriétaire |
 | GET | `/api/orders/me` | Liste paginée des commandes de l'utilisateur, filtrable par statut | `USER`, `ADMIN` |
 | POST | `/api/orders` | Crée une commande et décrémente les stocks produits | `USER`, `ADMIN` |
 | GET | `/api/products` | Liste le catalogue avec disponibilités et alerte `lowStock` | `USER`, `ADMIN` |

@@ -1,7 +1,7 @@
 meta {
-  name: 17 - Update Account USER (should fail - only ADMIN)
+  name: 14 - Update My Account (USER)
   type: http
-  seq: 17
+  seq: 14
 }
 
 put {
@@ -16,9 +16,8 @@ auth:bearer {
 
 body:json {
   {
-    "username": "alice_updated",
-    "email": "alice_new@paris.com",
-    "password": "NewPassword123",
+    "username": "alice_paris",
+    "email": "alice@paris.com",
     "address": {
       "street": "2 rue Nouvelle",
       "postalCode": "75003",
@@ -29,5 +28,7 @@ body:json {
 }
 
 assert {
-  res.status: eq 403
+  res.status: eq 200
+  res.body.username: eq alice_paris
+  res.body.address.street: eq "2 rue Nouvelle"
 }

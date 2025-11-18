@@ -1,7 +1,7 @@
 meta {
-  name: 14 - Get Account by ID (USER token)
+  name: 12 - Get My Account (USER)
   type: http
-  seq: 14
+  seq: 12
 }
 
 get {
@@ -17,7 +17,7 @@ auth:bearer {
 assert {
   res.status: eq 200
   res.body.accountId: eq 2
-  res.body.username: isDefined
-  res.body.email: isDefined
+  res.body.username: eq alice_paris
+  res.body.email: eq alice@paris.com
   res.body.address: isDefined
 }

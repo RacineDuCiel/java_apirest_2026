@@ -1,19 +1,20 @@
 meta {
-  name: 19 - Delete Account USER (should fail - only ADMIN)
+  name: 16 - Delete My Account (USER)
   type: http
-  seq: 19
+  seq: 16
 }
 
 delete {
-  url: http://localhost:8080/api/accounts/3
+  url: http://localhost:8080/api/accounts/4
   body: none
   auth: bearer
 }
 
 auth:bearer {
-  token: {{token_bob}}
+  token: {{token_charlie}}
 }
 
 assert {
-  res.status: eq 403
+  res.status: eq 200
+  res.body: eq "Compte supprimé avec succès"
 }

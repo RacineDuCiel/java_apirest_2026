@@ -1,7 +1,7 @@
 meta {
-  name: 18 - Update Account ADMIN (should succeed)
+  name: 15 - Update Account ADMIN (cross-account success)
   type: http
-  seq: 18
+  seq: 15
 }
 
 put {
@@ -16,9 +16,8 @@ auth:bearer {
 
 body:json {
   {
-    "username": "alice_modified_by_admin",
-    "email": "alice_admin@paris.com",
-    "password": "AdminChangedPassword",
+    "username": "alice_paris",
+    "email": "alice@paris.com",
     "address": {
       "street": "10 avenue des Champs-Élysées",
       "postalCode": "75008",
@@ -30,5 +29,6 @@ body:json {
 
 assert {
   res.status: eq 200
-  res.body.username: eq alice_modified_by_admin
+  res.body.username: eq alice_paris
+  res.body.address.street: eq "10 avenue des Champs-Élysées"
 }
