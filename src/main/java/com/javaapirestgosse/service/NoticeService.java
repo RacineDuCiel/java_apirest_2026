@@ -37,25 +37,25 @@ public class NoticeService {
     public NoticeResponse createNotice(NoticeRequest request) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Account account = accountRepository.findByUsername(username)
-                .orElseThrow(() -> new IllegalArgumentException("Utilisateur non trouvé"));
+                .orElseThrow(() -> new IllegalArgumentException("Impossible de publier un avis : l'utilisateur connecté est introuvable."));
 
         Orders order = ordersRepository.findById(request.getOrderId())
-                .orElseThrow(() -> new IllegalArgumentException("Commande non trouvée"));
+                .orElseThrow(() -> new IllegalArgumentException("Impossible de publier un avis : la commande spécifiée (ID: " + request.getOrderId() + ") n'existe pas."));
 
         // Vérifier que la commande appartient à l'utilisateur
         if (!order.getAccount().getAccountId().equals(account.getAccountId())) {
-            throw new IllegalArgumentException("Cette commande ne vous appartient pas");
+            throw new IllegalArgumentException("Action refusée : vous ne pouvez pas laisser d'avis sur une commande qui ne vous appartient pas.");
         }
 
         Product product = productRepository.findById(request.getProductId())
-                .orElseThrow(() -> new IllegalArgumentException("Produit non trouvé"));
+                .orElseThrow(() -> new IllegalArgumentException("Impossible de publier un avis : le produit spécifié (ID: " + request.getProductId() + ") n'existe pas."));
 
         // Vérifier que le produit est bien dans la commande
         boolean productInOrder = order.getOrderDetails().stream()
                 .anyMatch(detail -> detail.getProduct().getProductId().equals(product.getProductId()));
 
         if (!productInOrder) {
-            throw new IllegalArgumentException("Ce produit ne fait pas partie de la commande");
+            throw new IllegalArgumentException("Action refusée : vous ne pouvez pas évaluer le produit '" + product.getName() + "' car il ne fait pas partie de la commande n°" + order.getOrdersId() + ".");
         }
 
         Notice notice = new Notice();

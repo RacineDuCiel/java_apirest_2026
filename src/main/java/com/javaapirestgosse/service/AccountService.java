@@ -41,19 +41,19 @@ public class AccountService {
     public Account createAccount(Account account) {
         // Vérifier si l'username existe déjà
         if (accountRepository.existsByUsername(account.getUsername())) {
-            throw new IllegalArgumentException("Ce nom d'utilisateur est déjà pris");
+            throw new IllegalArgumentException("Inscription impossible : le nom d'utilisateur '" + account.getUsername() + "' est déjà utilisé.");
         }
 
         // Vérifier si l'email existe déjà
         if (accountRepository.existsByEmail(account.getEmail())) {
-            throw new IllegalArgumentException("Cet email est déjà utilisé");
+            throw new IllegalArgumentException("Inscription impossible : l'adresse email '" + account.getEmail() + "' est déjà associée à un compte.");
         }
 
         // Valider l'adresse si fournie
         if (account.getAddress() != null) {
             boolean isValid = addressValidationService.validateAddress(account.getAddress());
             if (!isValid) {
-                throw new IllegalArgumentException("L'adresse fournie n'est pas valide");
+                throw new IllegalArgumentException("Validation de l'adresse échouée : l'adresse fournie ne semble pas exister. Veuillez vérifier la saisie.");
             }
         }
 
@@ -83,20 +83,20 @@ public class AccountService {
         // Vérifier si le nouveau username est déjà pris par un autre compte
         if (!existingAccount.getUsername().equals(updatedAccount.getUsername()) &&
                 accountRepository.existsByUsername(updatedAccount.getUsername())) {
-            throw new IllegalArgumentException("Ce nom d'utilisateur est déjà pris");
+            throw new IllegalArgumentException("Mise à jour impossible : le nom d'utilisateur '" + updatedAccount.getUsername() + "' est déjà utilisé.");
         }
 
         // Vérifier si le nouveau email est déjà utilisé par un autre compte
         if (!existingAccount.getEmail().equals(updatedAccount.getEmail()) &&
                 accountRepository.existsByEmail(updatedAccount.getEmail())) {
-            throw new IllegalArgumentException("Cet email est déjà utilisé");
+            throw new IllegalArgumentException("Mise à jour impossible : l'adresse email '" + updatedAccount.getEmail() + "' est déjà associée à un compte.");
         }
 
         // Valider la nouvelle adresse si fournie
         if (updatedAccount.getAddress() != null) {
             boolean isValid = addressValidationService.validateAddress(updatedAccount.getAddress());
             if (!isValid) {
-                throw new IllegalArgumentException("L'adresse fournie n'est pas valide");
+                throw new IllegalArgumentException("Validation de l'adresse échouée : l'adresse fournie ne semble pas exister. Veuillez vérifier la saisie.");
             }
             existingAccount.setAddress(updatedAccount.getAddress());
         }

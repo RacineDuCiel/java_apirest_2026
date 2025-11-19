@@ -54,7 +54,7 @@ public class AuthService {
 
         // Récupérer l'utilisateur
         Account account = accountRepository.findByUsername(request.getUsername())
-                .orElseThrow(() -> new IllegalArgumentException("Utilisateur non trouvé"));
+                .orElseThrow(() -> new IllegalArgumentException("Connexion impossible : aucun compte n'est associé au nom d'utilisateur '" + request.getUsername() + "'."));
 
         // Générer le token JWT
         String jwtToken = jwtService.generateToken(account);

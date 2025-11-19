@@ -56,7 +56,7 @@ public class OrderService {
     @Transactional
     public OrderSummaryResponse createOrder(CreateOrderRequest request) {
         if (request.getItems() == null || request.getItems().isEmpty()) {
-            throw new IllegalArgumentException("La commande doit contenir au moins un produit");
+            throw new IllegalArgumentException("Création de commande impossible : votre panier est vide.");
         }
 
         Account account = getCurrentAccount();
@@ -80,16 +80,16 @@ public class OrderService {
 
     private OrderDetails buildOrderDetail(OrderItemRequest item, Orders orders) {
         Product product = productRepository.findById(item.getProductId())
-                .orElseThrow(() -> new IllegalArgumentException("Produit introuvable: " + item.getProductId()));
+                .orElseThrow(() -> new IllegalArgumentException("Erreur de commande : le produit avec l'ID " + item.getProductId() + " n'existe plus dans notre catalogue."));
 
         int requestedQuantity = item.getQuantity();
         if (requestedQuantity <= 0) {
-            throw new IllegalArgumentException("La quantité doit être positive");
+            throw new IllegalArgumentException("Erreur de commande : la quantité pour le produit '" + product.getName() + "' doit être supérieure à 0.");
         }
 
         int available = product.getAvailableQuantity() != null ? product.getAvailableQuantity() : 0;
         if (available < requestedQuantity) {
-            throw new IllegalArgumentException("Stock insuffisant pour le produit: " + product.getName());
+            throw new IllegalArgumentException("Stock insuffisant : impossible de commander " + requestedQuantity + " unités du produit '" + product.getName() + "'. Quantité disponible : " + available + ".");
         }
 
         product.setAvailableQuantity(available - requestedQuantity);
