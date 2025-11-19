@@ -28,6 +28,12 @@ public class GlobalExceptionHandler {
         return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage(), request.getRequestURI());
     }
 
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Map<String, Object>> handleGlobalException(Exception ex,
+                                                                     HttpServletRequest request) {
+        return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Une erreur interne est survenue", request.getRequestURI());
+    }
+
     private ResponseEntity<Map<String, Object>> buildResponse(HttpStatus status, String message, String path) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", Instant.now());

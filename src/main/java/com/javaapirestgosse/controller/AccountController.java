@@ -1,6 +1,9 @@
 package com.javaapirestgosse.controller;
 
+import com.javaapirestgosse.dto.AccountRequest;
+import com.javaapirestgosse.dto.AccountResponse;
 import com.javaapirestgosse.model.Account;
+import com.javaapirestgosse.model.Role;
 import com.javaapirestgosse.service.AccountService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -11,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/accounts")
@@ -28,8 +32,10 @@ public class AccountController {
     @Operation(summary = "Lister tous les comptes",
         description = "Réservé aux administrateurs.",
         security = {@SecurityRequirement(name = "bearerAuth")})
-    public ResponseEntity<List<Account>> getAllAccounts() {
-        List<Account> accounts = accountService.getAllAccounts();
+    public ResponseEntity<List<AccountResponse>> getAllAccounts() {
+        List<AccountResponse> accounts = accountService.getAllAccounts().stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
         return ResponseEntity.ok(accounts);
     }
 
@@ -38,27 +44,20 @@ public class AccountController {
     @Operation(summary = "Consulter un compte",
         description = "Accessible à l'administrateur ou au propriétaire du compte.",
         security = {@SecurityRequirement(name = "bearerAuth")})
-    public ResponseEntity<?> getAccountById(@PathVariable Long id) {
-        try {
-            Account account = accountService.getAccountById(id);
-            return ResponseEntity.ok(account);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+    public ResponseEntity<AccountResponse> getAccountById(@PathVariable Long id) {
+        Account account = accountService.getAccountById(id);
+        return ResponseEntity.ok(mapToResponse(account));
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_USER')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @Operation(summary = "Créer un compte",
-        description = "Accessible aux utilisateurs authentifiés (ROLE_USER ou ROLE_ADMIN).",
+        description = "Réservé aux administrateurs. Pour l'inscription utilisateur, utiliser /api/auth/register.",
         security = {@SecurityRequirement(name = "bearerAuth")})
-    public ResponseEntity<?> createAccount(@RequestBody Account account) {
-        try {
-            Account savedAccount = accountService.createAccount(account);
-            return ResponseEntity.status(HttpStatus.CREATED).body(savedAccount);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
+    public ResponseEntity<AccountResponse> createAccount(@RequestBody AccountRequest request) {
+        Account account = mapToEntity(request);
+        Account savedAccount = accountService.createAccount(account);
+        return ResponseEntity.status(HttpStatus.CREATED).body(mapToResponse(savedAccount));
     }
 
     @PutMapping("/{id}")
@@ -66,13 +65,10 @@ public class AccountController {
     @Operation(summary = "Mettre à jour un compte",
         description = "Accessible à l'administrateur ou au propriétaire du compte.",
         security = {@SecurityRequirement(name = "bearerAuth")})
-    public ResponseEntity<?> updateAccount(@PathVariable Long id, @RequestBody Account account) {
-        try {
-            Account updatedAccount = accountService.updateAccount(id, account);
-            return ResponseEntity.ok(updatedAccount);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+    public ResponseEntity<AccountResponse> updateAccount(@PathVariable Long id, @RequestBody AccountRequest request) {
+        Account account = mapToEntity(request);
+        Account updatedAccount = accountService.updateAccount(id, account);
+        return ResponseEntity.ok(mapToResponse(updatedAccount));
     }
 
     @DeleteMapping("/{id}")
@@ -80,12 +76,29 @@ public class AccountController {
     @Operation(summary = "Supprimer un compte",
         description = "Accessible à l'administrateur ou au propriétaire du compte.",
         security = {@SecurityRequirement(name = "bearerAuth")})
-    public ResponseEntity<?> deleteAccount(@PathVariable Long id) {
-        try {
-            accountService.deleteAccount(id);
-            return ResponseEntity.ok("Compte supprimé avec succès");
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+    public ResponseEntity<String> deleteAccount(@PathVariable Long id) {
+        accountService.deleteAccount(id);
+        return ResponseEntity.ok("Compte supprimé avec succès");
+    }
+
+    private AccountResponse mapToResponse(Account account) {
+        AccountResponse response = new AccountResponse();
+        response.setAccountId(account.getAccountId());
+        response.setUsername(account.getUsername());
+        response.setEmail(account.getEmail());
+        response.setAddress(account.getAddress());
+        response.setRoles(account.getRoles().stream()
+                .map(Role::getName)
+                .collect(Collectors.toSet()));
+        return response;
+    }
+
+    private Account mapToEntity(AccountRequest request) {
+        Account account = new Account();
+        account.setUsername(request.getUsername());
+        account.setEmail(request.getEmail());
+        account.setPassword(request.getPassword());
+        account.setAddress(request.getAddress());
+        return account;
     }
 }

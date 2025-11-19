@@ -47,7 +47,7 @@ public class SecurityConfig {
                                 "/swagger-ui.html",
                                 "/swagger-ui/**"
                         ).permitAll()
-                        .requestMatchers("/api/products/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                        .requestMatchers("/api/products/**").permitAll()
                         .requestMatchers("/api/orders/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
                         
                         // Routes accessibles selon les rôles

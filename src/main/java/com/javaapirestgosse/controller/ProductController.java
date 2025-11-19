@@ -25,10 +25,8 @@ public class ProductController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_USER')")
     @Operation(summary = "Lister les produits",
-        description = "Accessible aux utilisateurs authentifiés (ROLE_USER / ROLE_ADMIN). Retourne les informations de stock disponibles ainsi que le drapeau lowStock.",
-            security = {@SecurityRequirement(name = "bearerAuth")})
+        description = "Route publique. Retourne les informations de stock disponibles ainsi que le drapeau lowStock.")
     public ResponseEntity<List<Product>> getProducts() {
         return ResponseEntity.ok(productService.getAllProducts());
     }

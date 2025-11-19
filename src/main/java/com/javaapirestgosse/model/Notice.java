@@ -25,4 +25,8 @@ public class Notice {
     @ManyToOne
     @JoinColumn(name = "product_id", referencedColumnName = "productId")
     private Product product;
+
+    @ManyToOne
+    @JoinColumn(name = "orders_id", referencedColumnName = "ordersId")
+    private Orders orders;
 }
