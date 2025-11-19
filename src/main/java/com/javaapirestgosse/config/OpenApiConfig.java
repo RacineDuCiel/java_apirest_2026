@@ -34,12 +34,9 @@ public class OpenApiConfig {
                         .version("v1")
                         .contact(new Contact()
                                 .name("Support API")
-                                .email("support@example.com"))
+                                .email("theogo@live.fr"))
                         .license(new License()
                                 .name("Apache 2.0")
-                                .url("https://www.apache.org/licenses/LICENSE-2.0")))
-                .externalDocs(new ExternalDocumentation()
-                        .description("Documentation du projet")
-                        .url("https://github.com/sleepnfire/java_apirest_2026"));
+                                .url("https://www.apache.org/licenses/LICENSE-2.0")));
     }
 }
