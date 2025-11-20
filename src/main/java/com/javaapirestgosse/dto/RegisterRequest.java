@@ -1,18 +1,23 @@
 package com.javaapirestgosse.dto;
 
 import com.javaapirestgosse.model.Address;
-import lombok.Data;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import io.swagger.v3.oas.annotations.media.Schema;
 
-@Data
-public class RegisterRequest {
-    @io.swagger.v3.oas.annotations.media.Schema(example = "john.doe")
-    private String username;
+public record RegisterRequest(
+    @NotBlank(message = "Le nom d'utilisateur est obligatoire")
+    @Schema(example = "john.doe")
+    String username,
     
-    @io.swagger.v3.oas.annotations.media.Schema(example = "john.doe@example.com")
-    private String email;
+    @NotBlank(message = "L'email est obligatoire")
+    @Email(message = "Format d'email invalide")
+    @Schema(example = "john.doe@example.com")
+    String email,
     
-    @io.swagger.v3.oas.annotations.media.Schema(example = "password123")
-    private String password;
+    @NotBlank(message = "Le mot de passe est obligatoire")
+    @Schema(example = "password123")
+    String password,
     
-    private Address address;
-}
+    Address address
+) {}

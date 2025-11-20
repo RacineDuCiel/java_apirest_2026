@@ -1,12 +1,14 @@
 package com.javaapirestgosse.dto;
 
-import lombok.Data;
+import jakarta.validation.constraints.NotBlank;
+import io.swagger.v3.oas.annotations.media.Schema;
 
-@Data
-public class LoginRequest {
-    @io.swagger.v3.oas.annotations.media.Schema(example = "john.doe")
-    private String username;
+public record LoginRequest(
+    @NotBlank(message = "Le nom d'utilisateur est obligatoire")
+    @Schema(example = "john.doe")
+    String username,
     
-    @io.swagger.v3.oas.annotations.media.Schema(example = "password123")
-    private String password;
-}
+    @NotBlank(message = "Le mot de passe est obligatoire")
+    @Schema(example = "password123")
+    String password
+) {}

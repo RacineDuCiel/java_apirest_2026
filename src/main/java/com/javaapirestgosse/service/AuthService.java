@@ -30,10 +30,10 @@ public class AuthService {
     public AuthResponse register(RegisterRequest request) {
         // Créer le compte via AccountService qui gère la validation et le hachage
         Account account = new Account();
-        account.setUsername(request.getUsername());
-        account.setEmail(request.getEmail());
-        account.setPassword(request.getPassword());
-        account.setAddress(request.getAddress());
+        account.setUsername(request.username());
+        account.setEmail(request.email());
+        account.setPassword(request.password());
+        account.setAddress(request.address());
 
         Account savedAccount = accountService.createAccount(account);
 
@@ -47,14 +47,14 @@ public class AuthService {
         // Authentifier l'utilisateur
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        request.getUsername(),
-                        request.getPassword()
+                        request.username(),
+                        request.password()
                 )
         );
 
         // Récupérer l'utilisateur
-        Account account = accountRepository.findByUsername(request.getUsername())
-                .orElseThrow(() -> new IllegalArgumentException("Connexion impossible : aucun compte n'est associé au nom d'utilisateur '" + request.getUsername() + "'."));
+        Account account = accountRepository.findByUsername(request.username())
+                .orElseThrow(() -> new IllegalArgumentException("Connexion impossible : aucun compte n'est associé au nom d'utilisateur '" + request.username() + "'."));
 
         // Générer le token JWT
         String jwtToken = jwtService.generateToken(account);

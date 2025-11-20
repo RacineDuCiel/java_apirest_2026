@@ -24,7 +24,7 @@ public class AuthController {
     @PostMapping("/register")
     @Operation(summary = "Inscrire un utilisateur",
         description = "Route publique. Aucun token requis. Retourne un JWT." )
-    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<?> register(@jakarta.validation.Valid @RequestBody RegisterRequest request) {
         try {
             AuthResponse response = authService.register(request);
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -36,7 +36,7 @@ public class AuthController {
     @PostMapping("/login")
     @Operation(summary = "Authentifier un utilisateur",
         description = "Route publique. Fournit un JWT en cas de succès." )
-    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<?> login(@jakarta.validation.Valid @RequestBody LoginRequest request) {
         try {
             AuthResponse response = authService.login(request);
             return ResponseEntity.ok(response);

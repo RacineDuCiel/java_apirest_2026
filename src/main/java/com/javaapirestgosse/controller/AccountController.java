@@ -54,7 +54,7 @@ public class AccountController {
     @Operation(summary = "Créer un compte",
         description = "Réservé aux administrateurs. Pour l'inscription utilisateur, utiliser /api/auth/register.",
         security = {@SecurityRequirement(name = "bearerAuth")})
-    public ResponseEntity<AccountResponse> createAccount(@RequestBody AccountRequest request) {
+    public ResponseEntity<AccountResponse> createAccount(@jakarta.validation.Valid @RequestBody AccountRequest request) {
         Account account = mapToEntity(request);
         Account savedAccount = accountService.createAccount(account);
         return ResponseEntity.status(HttpStatus.CREATED).body(mapToResponse(savedAccount));
@@ -65,7 +65,7 @@ public class AccountController {
     @Operation(summary = "Mettre à jour un compte",
         description = "Accessible à l'administrateur ou au propriétaire du compte.",
         security = {@SecurityRequirement(name = "bearerAuth")})
-    public ResponseEntity<AccountResponse> updateAccount(@PathVariable Long id, @RequestBody AccountRequest request) {
+    public ResponseEntity<AccountResponse> updateAccount(@PathVariable Long id, @jakarta.validation.Valid @RequestBody AccountRequest request) {
         Account account = mapToEntity(request);
         Account updatedAccount = accountService.updateAccount(id, account);
         return ResponseEntity.ok(mapToResponse(updatedAccount));
@@ -82,23 +82,23 @@ public class AccountController {
     }
 
     private AccountResponse mapToResponse(Account account) {
-        AccountResponse response = new AccountResponse();
-        response.setAccountId(account.getAccountId());
-        response.setUsername(account.getUsername());
-        response.setEmail(account.getEmail());
-        response.setAddress(account.getAddress());
-        response.setRoles(account.getRoles().stream()
-                .map(Role::getName)
-                .collect(Collectors.toSet()));
-        return response;
+        return new AccountResponse(
+                account.getAccountId(),
+                account.getUsername(),
+                account.getEmail(),
+                account.getAddress(),
+                account.getRoles().stream()
+                        .map(Role::getName)
+                        .collect(Collectors.toSet())
+        );
     }
 
     private Account mapToEntity(AccountRequest request) {
         Account account = new Account();
-        account.setUsername(request.getUsername());
-        account.setEmail(request.getEmail());
-        account.setPassword(request.getPassword());
-        account.setAddress(request.getAddress());
+        account.setUsername(request.username());
+        account.setEmail(request.email());
+        account.setPassword(request.password());
+        account.setAddress(request.address());
         return account;
     }
 }
