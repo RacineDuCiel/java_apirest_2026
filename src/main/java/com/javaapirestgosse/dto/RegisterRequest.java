@@ -19,5 +19,6 @@ public record RegisterRequest(
     @Schema(example = "password123")
     String password,
     
+    @jakarta.validation.Valid
     Address address
 ) {}
