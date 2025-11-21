@@ -50,7 +50,7 @@ public class DataInitializer {
                         Account acc = new Account();
                         acc.setUsername("jean.dupont");
                         acc.setEmail("jean.dupont@example.com");
-                        acc.setPassword(passwordEncoder.encode("password123"));
+                        acc.setPassword(passwordEncoder.encode("motdepasse123"));
                         acc.setRoles(new HashSet<>(Set.of(roleUser)));
                         
                         Address addr = new Address();
@@ -69,7 +69,7 @@ public class DataInitializer {
                         Account acc = new Account();
                         acc.setUsername("marie.martin");
                         acc.setEmail("marie.martin@example.com");
-                        acc.setPassword(passwordEncoder.encode("password123"));
+                        acc.setPassword(passwordEncoder.encode("motdepasse123"));
                         acc.setRoles(new HashSet<>(Set.of(roleUser)));
                         
                         Address addr = new Address();
@@ -88,7 +88,7 @@ public class DataInitializer {
                         Account acc = new Account();
                         acc.setUsername("paul.durand");
                         acc.setEmail("paul.durand@example.com");
-                        acc.setPassword(passwordEncoder.encode("password123"));
+                        acc.setPassword(passwordEncoder.encode("motdepasse123"));
                         acc.setRoles(new HashSet<>(Set.of(roleUser)));
                         
                         Address addr = new Address();
@@ -168,9 +168,9 @@ public class DataInitializer {
             System.out.println("   Données de démonstration (FR) chargées !");
             System.out.println("   Comptes :");
             System.out.println("     - admin / admin123");
-            System.out.println("     - jean.dupont / password123");
-            System.out.println("     - marie.martin / password123");
-            System.out.println("     - paul.durand / password123");
+            System.out.println("     - jean.dupont / motdepasse123");
+            System.out.println("     - marie.martin / motdepasse123");
+            System.out.println("     - paul.durand / motdepasse123");
             System.out.println("========================================");
         };
     }
