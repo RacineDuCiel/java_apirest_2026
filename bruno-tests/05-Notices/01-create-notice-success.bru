@@ -1,0 +1,28 @@
+meta {
+  name: Create Notice - Success
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:8080/api/notices
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{aliceToken}}
+}
+
+body:json {
+  {
+    "orderId": {{orderId}},
+    "productId": {{productId}},
+    "rating": 5,
+    "comment": "Excellent produit !"
+  }
+}
+
+assert {
+  res.status: eq 201
+}

@@ -1,0 +1,27 @@
+meta {
+  name: Login Success - Alice
+  type: http
+  seq: 5
+}
+
+post {
+  url: http://localhost:8080/api/auth/login
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "username": "Alice",
+    "password": "password123"
+  }
+}
+
+assert {
+  res.status: eq 200
+  res.body.token: isString
+}
+
+script:post-response {
+  bru.setVar("aliceToken", res.body.token);
+}

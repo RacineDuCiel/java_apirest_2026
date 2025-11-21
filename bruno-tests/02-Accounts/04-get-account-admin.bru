@@ -1,0 +1,20 @@
+meta {
+  name: Get Account - Admin
+  type: http
+  seq: 4
+}
+
+get {
+  url: http://localhost:8080/api/accounts/{{aliceId}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+assert {
+  res.status: eq 200
+  res.body.username: eq Alice
+}

@@ -1,0 +1,30 @@
+meta {
+  name: Create Order - Invalid Product
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:8080/api/orders
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{aliceToken}}
+}
+
+body:json {
+  {
+    "items": [
+      {
+        "productId": 999999,
+        "quantity": 1
+      }
+    ]
+  }
+}
+
+assert {
+  res.status: eq 400
+}

@@ -1,9 +1,1 @@
-{
-  "version": "1",
-  "name": "bruno-tests",
-  "type": "collection",
-  "ignore": [
-    "node_modules",
-    ".git"
-  ]
-}
+{"version": "1", "name": "Java API Rest 2026", "type": "collection"}

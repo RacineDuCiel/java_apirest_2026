@@ -1,7 +1,7 @@
 meta {
-  name: 11 - List Accounts USER forbidden (403)
+  name: List Accounts - User (Forbidden)
   type: http
-  seq: 11
+  seq: 2
 }
 
 get {
@@ -11,7 +11,7 @@ get {
 }
 
 auth:bearer {
-  token: {{token_alice}}
+  token: {{aliceToken}}
 }
 
 assert {

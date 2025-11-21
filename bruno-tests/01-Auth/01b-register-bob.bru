@@ -1,0 +1,33 @@
+meta {
+  name: Register Success - Bob
+  type: http
+  seq: 7
+}
+
+post {
+  url: http://localhost:8080/api/auth/register
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "username": "Bob",
+    "email": "bob@example.com",
+    "password": "password123",
+    "address": {
+      "street": "456 Rue de Lyon",
+      "city": "Lyon",
+      "postalCode": "69001",
+      "country": "France"
+    }
+  }
+}
+
+assert {
+  res.status: eq 201
+}
+
+script:post-response {
+  bru.setVar("bobToken", res.body.token);
+}

@@ -1,0 +1,34 @@
+meta {
+  name: Register Success - Alice
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:8080/api/auth/register
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "username": "Alice",
+    "email": "alice@example.com",
+    "password": "password123",
+    "address": {
+      "street": "123 Rue de Paris",
+      "city": "Paris",
+      "postalCode": "75001",
+      "country": "France"
+    }
+  }
+}
+
+assert {
+  res.status: eq 201
+  res.body.token: isString
+}
+
+script:post-response {
+  bru.setVar("aliceToken", res.body.token);
+}

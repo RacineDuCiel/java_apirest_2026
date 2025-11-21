@@ -1,0 +1,29 @@
+meta {
+  name: Register Business - Duplicate Username
+  type: http
+  seq: 4
+}
+
+post {
+  url: http://localhost:8080/api/auth/register
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "username": "Alice",
+    "email": "alice.duplicate@example.com",
+    "password": "password123",
+    "address": {
+      "street": "Another Street",
+      "city": "Paris",
+      "postalCode": "75002",
+      "country": "France"
+    }
+  }
+}
+
+assert {
+  res.status: eq 400
+}

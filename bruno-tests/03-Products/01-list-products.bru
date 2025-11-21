@@ -1,0 +1,23 @@
+meta {
+  name: List Products
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:8080/api/products
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+  res.body: isArray
+}
+
+script:post-response {
+  const products = res.body;
+  if (products.length > 0) {
+    bru.setVar('productId', products[0].productId);
+  }
+}

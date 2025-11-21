@@ -192,4 +192,4 @@ Les paramètres de l'application sont définis dans `src/main/resources/applicat
 | `spring.profiles.active` | Profil Spring actif | `default` |
  
 ---
-*Projet académique - JAVA J2EE - I5 FISA RIOC*
+*Théo GOSSE - I5 FISA RIOC - JAVA J2EE*

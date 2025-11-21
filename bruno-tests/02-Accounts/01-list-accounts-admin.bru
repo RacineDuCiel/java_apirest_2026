@@ -1,0 +1,28 @@
+meta {
+  name: List Accounts - Admin
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:8080/api/accounts
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+assert {
+  res.status: eq 200
+  res.body: isArray
+}
+
+script:post-response {
+  const accounts = res.body;
+  const alice = accounts.find(a => a.username === 'Alice');
+  const bob = accounts.find(a => a.username === 'Bob');
+  if (alice) bru.setVar('aliceId', alice.accountId);
+  if (bob) bru.setVar('bobId', bob.accountId);
+}

@@ -1,0 +1,30 @@
+meta {
+  name: Create Order - Zero Quantity
+  type: http
+  seq: 4
+}
+
+post {
+  url: http://localhost:8080/api/orders
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{aliceToken}}
+}
+
+body:json {
+  {
+    "items": [
+      {
+        "productId": {{productId}},
+        "quantity": 0
+      }
+    ]
+  }
+}
+
+assert {
+  res.status: eq 400
+}

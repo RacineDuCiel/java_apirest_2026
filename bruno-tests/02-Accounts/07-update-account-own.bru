@@ -1,0 +1,34 @@
+meta {
+  name: Update Account - Own
+  type: http
+  seq: 7
+}
+
+put {
+  url: http://localhost:8080/api/accounts/{{aliceId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{aliceToken}}
+}
+
+body:json {
+  {
+    "username": "Alice",
+    "email": "alice.updated@example.com",
+    "password": "password123",
+    "address": {
+      "street": "New Street",
+      "city": "Paris",
+      "postalCode": "75002",
+      "country": "France"
+    }
+  }
+}
+
+assert {
+  res.status: eq 200
+  res.body.email: eq alice.updated@example.com
+}

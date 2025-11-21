@@ -1,0 +1,34 @@
+meta {
+  name: Create Account - Admin
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:8080/api/accounts
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:json {
+  {
+    "username": "Charlie",
+    "email": "charlie@example.com",
+    "password": "password123",
+    "address": {
+      "street": "789 Rue de Marseille",
+      "city": "Marseille",
+      "postalCode": "13001",
+      "country": "France"
+    }
+  }
+}
+
+assert {
+  res.status: eq 201
+  res.body.username: eq Charlie
+}
