@@ -1,0 +1,29 @@
+meta {
+  name: Register - Valid Address
+  type: http
+  seq: 9
+}
+
+post {
+  url: http://localhost:8080/api/auth/register
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "username": "valid.address",
+    "email": "valid@test.com",
+    "password": "password",
+    "address": {
+      "street": "10 Rue de la Paix",
+      "city": "Paris",
+      "postalCode": "75002",
+      "country": "France"
+    }
+  }
+}
+
+assert {
+  res.status: eq 200
+}

@@ -1,0 +1,29 @@
+meta {
+  name: Register - Invalid Address
+  type: http
+  seq: 10
+}
+
+post {
+  url: http://localhost:8080/api/auth/register
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "username": "invalid.address",
+    "email": "invalid@test.com",
+    "password": "password",
+    "address": {
+      "street": "9999 Rue Inexistante",
+      "city": "NullPart",
+      "postalCode": "00000",
+      "country": "France"
+    }
+  }
+}
+
+assert {
+  res.status: eq 400
+}
