@@ -179,11 +179,11 @@ La documentation OpenAPI est générée automatiquement et accessible à l'adres
 Une collection complète de tests est disponible dans le dossier `bruno-tests` pour valider l'intégralité de l'API.
 
 **Tests implémentés**
-1.  **01-Auth** : Inscription et Connexion.
-2.  **02-Accounts** : CRUD complet, gestion des droits (Admin vs User) et sécurité.
-3.  **03-Products** : Consultation du catalogue.
-4.  **04-Orders** : Création de commandes (validation stocks, panier vide) et historique.
-5.  **05-Notices** : Ajout d'avis sur les produits achetés.
+- **01-Auth** : Inscription et Connexion.
+- **02-Accounts** : CRUD complet, gestion des droits (Admin vs User) et sécurité.
+- **03-Products** : Consultation du catalogue.
+- **04-Orders** : Création de commandes (validation stocks, panier vide) et historique.
+- **05-Notices** : Ajout d'avis sur les produits achetés.
 
 **Configuration requise :**
 Pour que les variables (tokens, IDs) soient conservées entre les requêtes, vous devez sélectionner l'environnement **Local** dans Bruno :
