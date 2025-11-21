@@ -29,5 +29,5 @@ assert {
 }
 
 script:post-response {
-  bru.setVar("bobToken", res.body.token);
+  bru.setEnvVar("bobToken", res.body.token);
 }

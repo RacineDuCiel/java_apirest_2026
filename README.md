@@ -176,10 +176,23 @@ La documentation OpenAPI est générée automatiquement et accessible à l'adres
 **[http://localhost:8080/docs](http://localhost:8080/docs)**
 
 ### Tests API (Bruno)
-Une collection de requêtes pour le client API **Bruno** est disponible dans le dossier `bruno-tests`. Elle permet de tester les scénarios suivants :
-1.  Inscription d'un utilisateur.
-2.  Authentification et récupération du token.
-3.  Passage d'une commande.
+Une collection complète de tests est disponible dans le dossier `bruno-tests` pour valider l'intégralité de l'API.
+
+**Modules testés :**
+1.  **01-Auth** : Inscription (cas nominaux, erreurs de validation, doublons) et Connexion.
+2.  **02-Accounts** : CRUD complet, gestion des droits (Admin vs User) et sécurité.
+3.  **03-Products** : Consultation du catalogue.
+4.  **04-Orders** : Création de commandes (validation stocks, panier vide) et historique.
+5.  **05-Notices** : Ajout d'avis sur les produits achetés.
+
+**Configuration requise :**
+Pour que les variables (tokens, IDs) soient conservées entre les requêtes, vous devez sélectionner l'environnement **Local** dans Bruno :
+1.  Ouvrez Bruno.
+2.  En haut à droite, cliquez sur le menu déroulant des environnements (souvent "No Environment").
+3.  Sélectionnez **Local**.
+
+**Exécution :**
+Il est recommandé de lancer la collection entière ou les dossiers dans l'ordre numérique, car certains tests dépendent des données (tokens, IDs) générées par les précédents.
 
 ## Configuration
 

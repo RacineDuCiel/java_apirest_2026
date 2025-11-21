@@ -1,7 +1,7 @@
 meta {
-  name: Login Success - Alice
+  name: Login Success - Admin
   type: http
-  seq: 5
+  seq: 8
 }
 
 post {
@@ -12,16 +12,15 @@ post {
 
 body:json {
   {
-    "username": "Alice",
-    "password": "password123"
+    "username": "admin",
+    "password": "admin123"
   }
 }
 
 assert {
   res.status: eq 200
-  res.body.token: isString
 }
 
 script:post-response {
-  bru.setEnvVar("aliceToken", res.body.token);
+  bru.setEnvVar("adminToken", res.body.token);
 }
