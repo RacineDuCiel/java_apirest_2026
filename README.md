@@ -1,163 +1,195 @@
 # JAVA_API_REST_GOSSE
 
-Bienvenue sur le projet **JAVA_API_REST_GOSSE**. Ce projet est une API RESTful développée avec **Spring Boot 3.5.6** et **Java 21**. Elle gère un système e-commerce complet incluant l'authentification, la gestion des comptes utilisateurs, le catalogue produits, les commandes et les avis clients.
+![Java](https://img.shields.io/badge/Java-21-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.5.6-6DB33F?style=for-the-badge&logo=spring-boot&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-Enabled-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+
+Ce projet implémente une API REST pour une application de commerce, développée avec Java 21 et Spring Boot 3.5.6.
 
 ## Table des Matières
 
-1. [Aperçu du Projet](#aperçu-du-projet)
-2. [Technologies Utilisées](#technologies-utilisées)
-3. [Fonctionnalités](#fonctionnalités)
-4. [Architecture Technique](#architecture-technique)
-5. [Prérequis](#prérequis)
-6. [Installation et Démarrage](#installation-et-démarrage)
-7. [Configuration](#configuration)
-8. [Documentation de l'API](#documentation-de-lapi)
-9. [Sécurité](#sécurité)
-10. [Gestion des Erreurs](#gestion-des-erreurs)
+1. [Description du Projet](#description-du-projet)
+2. [Architecture Technique](#architecture-technique)
+3. [Modèle de Données](#modèle-de-données)
+4. [Fonctionnalités](#fonctionnalités)
+5. [Déploiement avec Docker](#déploiement-avec-docker)
+6. [Installation Locale](#installation-locale)
+7. [Documentation et Tests](#documentation-et-tests)
+8. [Configuration](#configuration)
+9. [Auteurs](#auteurs)
 
 ---
 
-## Aperçu du Projet
+## Description du Projet
 
-Cette application backend fournit une infrastructure robuste pour une plateforme e-commerce. Elle a été conçue pour être modulaire, sécurisée et facilement extensible. L'API permet aux clients de s'inscrire, de consulter des produits, de passer des commandes et de laisser des avis, tout en offrant aux administrateurs des outils de gestion complets.
+Cette application backend gère les fonctionnalités essentielles d'une plateforme de vente en ligne. Elle permet la gestion des utilisateurs, du catalogue de produits, des commandes et des avis clients.
 
-## Technologies Utilisées
-
-*   **Langage** : Java 21
-*   **Framework** : Spring Boot 3.5.6
-*   **Sécurité** : Spring Security, JWT (JSON Web Tokens)
-*   **Base de Données** : H2 Database (In-Memory pour le développement)
-*   **ORM** : Spring Data JPA (Hibernate)
-*   **Validation** : Hibernate Validator
-*   **Documentation** : SpringDoc OpenAPI (Swagger UI)
-*   **Outils de Build** : Maven
-*   **Tests API** : Bruno
-
-## Fonctionnalités
-
-### Authentification et Utilisateurs
-*   **Inscription et Connexion** : Sécurisées via JWT.
-*   **Gestion des Rôles** : Distinction stricte entre `ROLE_USER` et `ROLE_ADMIN`.
-*   **Gestion de Profil** : Les utilisateurs peuvent modifier leurs informations personnelles.
-
-### E-commerce
-*   **Catalogue Produits** : Consultation des produits avec gestion des stocks en temps réel.
-*   **Système de Commandes** : Création de commandes avec décrémentation automatique des stocks.
-*   **Historique** : Les utilisateurs peuvent consulter leur historique de commandes avec pagination et tri.
-*   **Avis Clients** : Possibilité de noter et commenter les produits achetés.
-
-### Services Externes
-*   **Validation d'Adresse** : Intégration de l'API gouvernementale `data.geopf.fr` pour valider les adresses de livraison en France.
+**Caractéristiques principales :**
+*   **Authentification** : Utilisation de JWT (JSON Web Tokens) pour l'authentification stateless.
+*   **Base de données** : Utilisation de H2 (in-memory) pour le développement et les tests.
+*   **Validation** : Vérification des données entrantes et validation des adresses via l'API `data.geopf.fr`.
+*   **Gestion des erreurs** : Centralisation des exceptions via `@ControllerAdvice`.
 
 ## Architecture Technique
 
-Le projet respecte une architecture en couches standard pour assurer la maintenabilité et la séparation des responsabilités.
+Le projet est structuré selon une architecture en couches standard.
 
 ```text
 src/main/java/com/javaapirestgosse
-├── config       # Configuration (Sécurité, Swagger, etc.)
-├── controller   # Points d'entrée de l'API (REST Controllers)
-├── dto          # Objets de transfert de données (Request/Response)
-├── exception    # Gestion centralisée des exceptions
-├── model        # Entités JPA (Base de données)
-├── repository   # Interfaces d'accès aux données (DAO)
-├── security     # Logique de sécurité spécifique (ex: vérification de propriété)
-└── service      # Logique métier
+├── config       # Classes de configuration (Sécurité, Swagger, CORS)
+├── controller   # Contrôleurs REST (Points d'entrée)
+├── dto          # Objets de transfert de données (DTO)
+├── exception    # Gestionnaire global d'exceptions
+├── model        # Entités JPA
+├── repository   # Interfaces d'accès aux données (Spring Data JPA)
+├── security     # Configuration de la sécurité et filtres JWT
+└── service      # Couche métier
 ```
 
-## Prérequis
+### Détails d'implémentation
+*   **DTO (Data Transfer Objects)** : Les entités JPA ne sont pas exposées directement via l'API. Des objets DTO sont utilisés pour transférer les données entre le client et le serveur.
+*   **Gestion des exceptions** : Les erreurs sont capturées et renvoyées au client sous un format JSON standardisé.
 
-*   **Java JDK 21**
-*   **Maven 3.9+**
-*   **Git**
+## Spécificités Techniques
 
-## Installation et Démarrage
+### Sécurité Granulaire (Method Security)
+Au-delà de l'authentification JWT, l'application implémente une sécurité fine au niveau des méthodes via Spring Security (`@PreAuthorize`).
+Une classe personnalisée `AccountSecurity` permet de définir des règles d'accès contextuelles.
 
-### 1. Récupération du code source
-
-```bash
-git clone <URL_DU_DEPOT>
-cd java_apirest_2026
+*Exemple :* Seul l'administrateur ou le propriétaire d'un compte peut modifier ses informations.
+```java
+@PreAuthorize("@accountSecurity.canAccessAccount(authentication, #id)")
+public ResponseEntity<AccountResponse> updateAccount(...)
 ```
 
-### 2. Compilation
+### Gestion Standardisée des Erreurs
+Toutes les exceptions (métier, validation, accès) sont interceptées par un `GlobalExceptionHandler`. L'API retourne systématiquement une réponse structurée pour faciliter le débogage côté client.
 
-```bash
-# Sous Linux / macOS
-./mvnw clean install
-
-# Sous Windows
-mvnw.cmd clean install
-```
-
-### 3. Exécution
-
-```bash
-# Sous Linux / macOS
-./mvnw spring-boot:run
-
-# Sous Windows
-mvnw.cmd spring-boot:run
-```
-
-Le serveur démarrera par défaut sur le port **8080**.
-
-## Configuration
-
-La configuration de l'application se trouve dans `src/main/resources/application.properties`.
-
-### Paramètres Principaux
-
-| Clé | Description | Valeur par défaut |
-| :--- | :--- | :--- |
-| `server.port` | Port d'écoute du serveur | `8080` |
-| `spring.datasource.url` | URL de connexion JDBC | `jdbc:h2:mem:testdb` |
-| `jwt.secret` | Clé de signature des tokens | *(Définie dans le code)* |
-| `jwt.expiration` | Durée de validité du token | `86400000` (24h) |
-
-### Variables d'Environnement
-
-Pour la production, il est recommandé de surcharger les propriétés sensibles via des variables d'environnement :
-
-*   `JWT_SECRET` : Pour définir une clé secrète robuste.
-
-## Documentation de l'API
-
-L'API est entièrement documentée via OpenAPI (Swagger). Une interface interactive est disponible lorsque l'application est lancée.
-
-*   **URL Swagger UI** : `http://localhost:8080/docs`
-*   **Spécification JSON** : `http://localhost:8080/v3/api-docs`
-
-## Sécurité
-
-L'authentification est gérée via des tokens **Bearer JWT**.
-
-1.  L'utilisateur s'authentifie via `/api/auth/login`.
-2.  L'API retourne un token JWT.
-3.  Ce token doit être inclus dans l'en-tête `Authorization` de chaque requête protégée :
-
-```http
-Authorization: Bearer <VOTRE_TOKEN>
-```
-
-### Contrôle d'Accès
-
-*   **Public** : Inscription, Connexion, Consultation des produits.
-*   **Authentifié** : Création de commande, Avis, Consultation de profil.
-*   **Admin** : Gestion complète des comptes, Accès aux métriques (Actuator).
-
-## Gestion des Erreurs
-
-L'API utilise un format de réponse d'erreur standardisé pour faciliter le débogage côté client.
-
-**Exemple de réponse d'erreur (400 Bad Request) :**
-
+**Format de réponse d'erreur :**
 ```json
 {
-  "timestamp": "2023-11-20T10:15:30",
+  "timestamp": "2023-11-21T10:15:30",
   "status": 400,
   "error": "Bad Request",
   "message": "Le champ 'email' doit être une adresse email valide",
   "path": "/api/auth/register"
 }
 ```
+
+### Validation des Données
+L'intégrité des données est garantie par l'utilisation de l'API `Jakarta Validation` directement dans les DTOs.
+*   **Email** : Vérification du format.
+*   **Champs obligatoires** : `@NotBlank`, `@NotNull`.
+*   **Logique métier** : Validation personnalisée si nécessaire.
+
+
+
+## Fonctionnalités
+
+### Authentification et Rôles
+*   **Inscription/Connexion** : Obtention d'un token JWT.
+*   **Contrôle d'accès (RBAC)** :
+    *   `PUBLIC` : Accès au catalogue et à l'authentification.
+    *   `USER` : Accès à la création de commandes et au profil utilisateur.
+    *   `ADMIN` : Accès à la gestion des utilisateurs, des stocks et aux métriques.
+
+### Gestion E-commerce
+*   **Catalogue** : Consultation des produits et état des stocks.
+*   **Commandes** : Processus de commande avec vérification des stocks.
+*   **Avis** : Ajout de notes et commentaires sur les produits commandés.
+
+### Intégrations
+*   **Géocodage** : Validation de l'existence des adresses de livraison via une API externe.
+
+## Déploiement avec Docker
+
+Le projet inclut une configuration Docker pour faciliter le déploiement.
+
+1.  **Cloner le dépôt**
+    ```bash
+    git clone <URL_DU_REPO>
+    cd java_apirest_2026
+    ```
+
+2.  **Lancer l'application**
+    ```bash
+    docker compose up --build
+    ```
+
+3.  **Accès**
+    *   API : `http://localhost:8080`
+    *   Documentation Swagger : `http://localhost:8080/docs`
+    *   Console H2 : `http://localhost:8080/h2-console`
+
+## Installation Locale
+
+Instructions pour une exécution sans Docker.
+
+### Prérequis
+*   Java 21 JDK
+*   Maven 3.9+
+
+### Exécution
+```bash
+# Compilation et installation des dépendances
+./mvnw clean install
+
+# Démarrage de l'application
+./mvnw spring-boot:run
+```
+
+## Environnement de Développement & Tests
+
+Pour faciliter le test et la validation des fonctionnalités, l'application est pré-configurée avec des outils et des données spécifiques.
+
+> [NOTE]
+> Ces configurations sont destinées uniquement à un environnement de développement ou de démonstration. En production, la base de données H2 doit être remplacée par une base persistante (PostgreSQL, MySQL) et le chargement automatique des données désactivé.
+
+### Données Initiales (Seeder)
+Au démarrage, la classe `DataInitializer` peuple automatiquement la base de données avec un jeu de données complet pour simuler une activité réelle :
+*   **Catalogue** : Une quinzaine de produits (High-Tech, Maison, Sport).
+*   **Utilisateurs** : Plusieurs comptes avec des historiques de commandes variés.
+*   **Commandes & Avis** : Des commandes livrées, en cours ou annulées, ainsi que des avis clients.
+
+### Comptes de Démonstration
+Voici les identifiants pré-créés pour tester les différents rôles :
+
+| Rôle | Nom d'utilisateur | Mot de passe | Description |
+| :--- | :--- | :--- | :--- |
+| **ADMIN** | `admin` | `admin123` | Accès complet au back-office. |
+| **USER** | `jean.dupont` | `motdepasse123` | Client avec historique de commandes. |
+| **USER** | `marie.martin` | `motdepasse123` | Client avec panier en cours. |
+| **USER** | `paul.durand` | `motdepasse123` | Client avec commandes annulées. |
+
+### Console H2
+Une interface web est disponible pour explorer et requêter la base de données en mémoire directement.
+
+*   **URL** : `http://localhost:8080/h2-console`
+*   **JDBC URL** : `jdbc:h2:mem:testdb`
+*   **User** : `sa`
+*   **Password** : `password`
+
+## Documentation et Tests
+
+### Swagger UI
+La documentation OpenAPI est générée automatiquement et accessible à l'adresse suivante :
+**[http://localhost:8080/docs](http://localhost:8080/docs)**
+
+### Tests API (Bruno)
+Une collection de requêtes pour le client API **Bruno** est disponible dans le dossier `bruno-tests`. Elle permet de tester les scénarios suivants :
+1.  Inscription d'un utilisateur.
+2.  Authentification et récupération du token.
+3.  Passage d'une commande.
+
+## Configuration
+
+Les paramètres de l'application sont définis dans `src/main/resources/application.properties`.
+
+| Propriété | Description | Valeur par défaut |
+| :--- | :--- | :--- |
+| `server.port` | Port d'écoute HTTP | `8080` |
+| `JWT_SECRET` | Clé secrète pour la signature JWT | *(Valeur de développement)* |
+| `spring.profiles.active` | Profil Spring actif | `default` |
+ 
+---
+*Projet académique - JAVA J2EE - I5 FISA RIOC*
