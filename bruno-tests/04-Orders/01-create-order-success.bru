@@ -31,5 +31,5 @@ assert {
 }
 
 script:post-response {
-  bru.setVar("orderId", res.body.orderId);
+  bru.setEnvVar("orderId", res.body.orderId);
 }

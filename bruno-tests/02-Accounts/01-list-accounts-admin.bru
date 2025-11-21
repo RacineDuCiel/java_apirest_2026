@@ -24,7 +24,7 @@ script:post-response {
   if (Array.isArray(accounts)) {
     const alice = accounts.find(a => a.username === 'Alice');
     const bob = accounts.find(a => a.username === 'Bob');
-    if (alice) bru.setVar('aliceId', alice.accountId);
-    if (bob) bru.setVar('bobId', bob.accountId);
+    if (alice) bru.setEnvVar('aliceId', alice.accountId);
+    if (bob) bru.setEnvVar('bobId', bob.accountId);
   }
 }
