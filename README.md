@@ -175,10 +175,10 @@ Une interface web est disponible pour explorer et requêter la base de données 
 La documentation OpenAPI est générée automatiquement et accessible à l'adresse suivante :
 **[http://localhost:8080/docs](http://localhost:8080/docs)**
 
-### Tests API (Bruno)
+### Tests API (avec l'application open-source [Bruno](https://www.usebruno.com/))
 Une collection complète de tests est disponible dans le dossier `bruno-tests` pour valider l'intégralité de l'API.
 
-**Modules testés :**
+**Tests implémentés**
 1.  **01-Auth** : Inscription et Connexion.
 2.  **02-Accounts** : CRUD complet, gestion des droits (Admin vs User) et sécurité.
 3.  **03-Products** : Consultation du catalogue.
@@ -193,6 +193,11 @@ Pour que les variables (tokens, IDs) soient conservées entre les requêtes, vou
 
 **Exécution :**
 Il est recommandé de lancer la collection entière ou les dossiers dans l'ordre numérique, car certains tests dépendent des données (tokens, IDs) générées par les précédents.
+
+On peut également run la collection de tests intégralement et automatiquement pour observer que tous les tests sont réussis :
+
+![Tests Réussis](images/tests_réussis.png)
+
 
 ## Configuration
 
